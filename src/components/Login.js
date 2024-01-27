@@ -3,14 +3,13 @@ import Header from './Header'
 import { checkValidateData } from '../utils/validate';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '../utils/firebase';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { USER_AVTAR } from '../utils/constants';
 import { addUser } from '../utils/userSlice';
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMesage] = useState(null);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const name = useRef(null);
   const email = useRef(null);
@@ -39,19 +38,16 @@ const Login = () => {
           const user = userCredential.user;
 
           updateProfile(user, {
-            displayName: name.current.value, photoURL: "https://ih1.redbubble.net/image.3036212104.2350/flat,750x,075,f-pad,750x1000,f8f8f8.u1.jpg"
+            displayName: name.current.value, photoURL: USER_AVTAR,
           }).then(() => {
             // Profile updated!
             const { uid, email, displayName, photoURL } = auth.currentUser;
             dispatch(addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL }));
-            navigate('/browse')
             // ...
           }).catch((error) => {
             // An error occurred
             setErrorMesage(error.message)
           });
-
-          console.log(user);
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -67,8 +63,6 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
-          console.log(user)
-          navigate('/browse')
         })
         .catch((error) => {
           const errorCode = error.code;
