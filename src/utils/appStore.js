@@ -9,7 +9,7 @@ const appStore = configureStore({
         user: userReducer,
         movies: moviesReducer,
         gpt: gptReducer,
-        config: configReducer
+        config: configReducer,
     },
 });
 
